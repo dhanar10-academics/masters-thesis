@@ -10,8 +10,10 @@ public class ArtificialBeeColony {
 	
 	public void optimize(IOptimizationProblem problem, int maximumCycleNumber) {
 		double x[][] = new double[foodSource][problem.length()];
+		double xfit[] = new double[foodSource];
 		int xlimit[] = new int[foodSource];
 		double xbest[] = new double[problem.length()];
+		double xbestfit = 0;
 		
 		// initialization
 		
@@ -19,14 +21,15 @@ public class ArtificialBeeColony {
 			for (int i = 0; i < x[0].length; i++) {
 				x[m][i] = problem.lowerBound()[i] + Math.random() * (problem.upperBound()[i] - problem.lowerBound()[i]);
 			}
+			
+			xfit[m] = problem.getFitness(x[m]);
 		}
 		
 		for (int mcn = 1; mcn <= maximumCycleNumber; mcn++) {
+			
 			for (int m = 0; m < x.length; m++) {
-				
-				// employed
-				
 				double v[] = new double[problem.length()];
+				double vfit = 0;
 				int k = 0;
 				
 				do {
@@ -42,8 +45,11 @@ public class ArtificialBeeColony {
 					v[i] = v[i] > problem.upperBound()[i] ? problem.upperBound()[i] : v[i];
 				}
 				
-				if (problem.getFitness(v) > problem.getFitness(x[m])) {
+				vfit = problem.getFitness(v);
+				
+				if (vfit > xfit[m]) {
 					x[m] = v;
+					xfit[m] = vfit;
 				}
 				else {
 					xlimit[m]++;
@@ -55,19 +61,20 @@ public class ArtificialBeeColony {
 			for (int t = 0; t < x.length; t++) {
 				double xfitmax = 0;
 				double v[] = new double[problem.length()];
+				double vfit = 0;
 				int m = 0;
 				int k = 0;
 				
 				for (int i = 0; i < x.length; i++) {
-					if (problem.getFitness(x[i]) > xfitmax) {
-						xfitmax = problem.getFitness(x[i]);
+					if (xfit[i] > xfitmax) {
+						xfitmax = xfit[i];
 					}
 				}
 				
 				while (true) {
 					m = (int) (Math.random() * x.length);
 					
-					if (Math.random() < problem.getFitness(x[m]) / xfitmax)
+					if (Math.random() < xfit[m] / xfitmax)
 						break;
 				}
 				
@@ -84,8 +91,11 @@ public class ArtificialBeeColony {
 					v[i] = v[i] > problem.upperBound()[i] ? problem.upperBound()[i] : v[i];
 				}
 				
-				if (problem.getFitness(v) > problem.getFitness(x[m])) {
+				vfit = problem.getFitness(v);
+				
+				if (vfit > xfit[m]) {
 					x[m] = v;
+					xfit[m] = vfit;
 				}
 			}
 			
@@ -102,8 +112,9 @@ public class ArtificialBeeColony {
 			// remember the best solution so far
 			
 			for (int m = 0; m < x.length; m++) {
-				if (problem.getFitness(x[m]) > problem.getFitness(xbest)) {
+				if (xfit[m] > xbestfit) {
 					xbest = x[m].clone();
+					xbestfit = xfit[m];
 				}
 			}
 			
@@ -123,4 +134,3 @@ public class ArtificialBeeColony {
 		return bestSolution;
 	}
 }
-
