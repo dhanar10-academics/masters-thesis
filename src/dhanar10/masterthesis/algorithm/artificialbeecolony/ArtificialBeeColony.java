@@ -124,7 +124,7 @@ public class ArtificialBeeColony {
 				System.out.print((int) xbest[i] + "\t");
 			}
 			
-			System.out.println(problem.getFitness(xbest));
+			System.out.println(xbestfit);
 		}
 		
 		bestSolution = xbest;
