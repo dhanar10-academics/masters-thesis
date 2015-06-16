@@ -1,21 +1,21 @@
-package dhanar10.masterthesis;
+package dhanar10.mastersthesisexperiment;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.util.ArrayList;
 
-import dhanar10.masterthesis.algorithm.artificialbeecolony.ArtificialBeeColony;
-import dhanar10.masterthesis.algorithm.artificialbeecolony.IOptimizationProblem;
-import dhanar10.masterthesis.algorithm.rpropneuralnetwork.RpropNeuralNetwork;
+import dhanar10.mastersthesisexperiment.algorithm.artificialbeecolony.ArtificialBeeColony;
+import dhanar10.mastersthesisexperiment.algorithm.artificialbeecolony.IOptimizationProblem;
+import dhanar10.mastersthesisexperiment.algorithm.rpropneuralnetwork.RpropNeuralNetwork;
 
-public class MasterThesis {
+public class MastersThesisExperiment {
 
 	public static void main(String[] args) {
-		 MasterThesis mt = new MasterThesis();
-		 mt.runExperiment();
+		 MastersThesisExperiment mte = new MastersThesisExperiment();
+		 mte.run();
 	}
 
-	public void runExperiment() {
+	public void run() {
 		IOptimizationProblem problem = new IOptimizationProblem() {
 			private static final int MAX_TRIAL = 10;
 			private static final int HIDDEN_NEURON = 5;
@@ -25,13 +25,13 @@ public class MasterThesis {
 			private double data[][] = normalize(load("data.csv", 1));
 			
 			public int length() {
-				return 3;
+				return 1;
 			}
 			public double[] upperBound() {
-				return new double[] { 8, 8, 8 };
+				return new double[] { 7 };
 			}
 			public double[] lowerBound() {
-				return new double[] { 2, 2, 2 };
+				return new double[] { 1 };
 			}
 			public double getFitness(double x[]) {
 				double sdata[][] = new double[data.length][this.length() + 1];
@@ -46,16 +46,14 @@ public class MasterThesis {
 				
 				for (int i = 0; i < data.length; i++) {
 					sdata[i][0] = data[i][(int) x[0]];
-					sdata[i][1] = data[i][(int) x[1]];
-					sdata[i][2] = data[i][(int) x[2]];
-					sdata[i][3] = data[i][1];
+					sdata[i][sdata[i].length - 1] = data[i][8];
 				}
 				
 				RpropNeuralNetwork bestRprop = null;
 				
 				for (int i = 0; i < MAX_TRIAL; i++) {
 					RpropNeuralNetwork rprop = new RpropNeuralNetwork(sdata[0].length - 1, HIDDEN_NEURON, 1);
-					rprop.train(sdata, TARGET_MSE, MAX_EPOCH);
+					boolean success = rprop.train(sdata, TARGET_MSE, MAX_EPOCH);
 					
 					if (bestRprop == null) {
 						bestRprop = rprop;
@@ -64,7 +62,11 @@ public class MasterThesis {
 					if (rprop.getMse() < bestRprop.getMse()) {
 						bestRprop = rprop;
 					}
+					
+					System.out.print(success ? "x" : ".");
 				}
+				
+				System.out.println();
 				
 				return 1 / bestRprop.getMse();
 			}

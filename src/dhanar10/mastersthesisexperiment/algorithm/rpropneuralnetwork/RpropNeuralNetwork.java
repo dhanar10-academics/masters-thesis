@@ -1,4 +1,4 @@
-package dhanar10.masterthesis.algorithm.rpropneuralnetwork;
+package dhanar10.mastersthesisexperiment.algorithm.rpropneuralnetwork;
 
 public class RpropNeuralNetwork {
 	public static final double DELTA_ZERO = 0.1;
