@@ -7,13 +7,15 @@ public class RpropNeuralNetwork {
 	public static final double DELTA_MAX = 50;
 	public static final double DELTA_MIN = 0.000001;
 	
+	private double mse = 0;
+	
 	private double yInput[];
 	private double yHidden[];
 	private double yOutput[];
 	
 	private double wInputHidden[][];
 	private double wHiddenOutput[][];
-	
+
 	public RpropNeuralNetwork(int input, int hidden, int output) {
 		yInput = new double[input];
 		yHidden = new double[hidden];
@@ -26,13 +28,13 @@ public class RpropNeuralNetwork {
 	public boolean train(double data[][], double targetMse, double maxEpoch) {
 		boolean success = true;
 		
+		int epoch = 0;
+		
 		double dInputHidden[][] = new double[yInput.length][yHidden.length];
 		double dHiddenOutput[][] = new double[yHidden.length][yOutput.length];
 		
 		double gpInputHidden[][] = new double[yInput.length][yHidden.length];
 		double gpHiddenOutput[][] = new double[yHidden.length][yOutput.length];
-		
-		int epoch = 0;
 		
 		for (int i = 0; i < wInputHidden.length; i++) {
 			for (int j = 0; j < wInputHidden[0].length; j++) {
@@ -59,12 +61,12 @@ public class RpropNeuralNetwork {
 		}
 		
 		while (true) {
-			double mse = 0;
-			
 			double gInputHidden[][] = new double[yInput.length][yHidden.length];
 			double gHiddenOutput[][] = new double[yHidden.length][yOutput.length];
 
 			epoch++;
+			
+			mse = 0;
 			
 			for (double[] d : data) {
 				double yTarget[] = new double[yOutput.length];
@@ -81,7 +83,7 @@ public class RpropNeuralNetwork {
 					}
 				}
 				
-				run(yInput);
+				this.compute(yInput);
 				
 				for (int i = 0; i < yOutput.length; i++) {
 					eOutput[i] = (yTarget[i] - yOutput[i]) * dsigmoid(yOutput[i]);
@@ -154,7 +156,7 @@ public class RpropNeuralNetwork {
 			
 			mse /= data.length * data[0].length;
 			
-			System.out.println(epoch + "\t" + mse);
+			//System.out.println(epoch + "\t" + mse);
 			
 			if (mse < targetMse) {
 				break;
@@ -169,7 +171,7 @@ public class RpropNeuralNetwork {
 		return success;
 	}
 	
-	public double[] run(double input[]) {
+	public double[] compute(double input[]) {
 		for (int i = 0; i < yInput.length; i++) {
 			yInput[i] = input[i];
 		}
@@ -195,6 +197,10 @@ public class RpropNeuralNetwork {
 		}
 		
 		return yOutput;
+	}
+	
+	public double getMse() {
+		return mse;
 	}
 	
 	private double sigmoid(double x) {
