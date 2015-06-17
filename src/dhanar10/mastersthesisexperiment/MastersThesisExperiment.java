@@ -19,19 +19,19 @@ public class MastersThesisExperiment {
 		IOptimizationProblem problem = new IOptimizationProblem() {
 			private static final int MAX_TRIAL = 10;
 			private static final int HIDDEN_NEURON = 5;
-			private static final double TARGET_MSE = 0.001;
-			private static final int MAX_EPOCH = 1000;
+			private static final double TARGET_MSE = 0.0001;
+			private static final int MAX_EPOCH = 10000;
 			
 			private double data[][] = normalize(load("data.csv", 1));
 			
 			public int length() {
-				return 1;
+				return 3;
 			}
 			public double[] upperBound() {
-				return new double[] { 7 };
+				return new double[] { 7, 7, 7 };
 			}
 			public double[] lowerBound() {
-				return new double[] { 1 };
+				return new double[] { 1, 1, 1 };
 			}
 			public double getFitness(double x[]) {
 				double sdata[][] = new double[data.length][this.length() + 1];
@@ -46,6 +46,8 @@ public class MastersThesisExperiment {
 				
 				for (int i = 0; i < data.length; i++) {
 					sdata[i][0] = data[i][(int) x[0]];
+					sdata[i][1] = data[i][(int) x[1]];
+					sdata[i][2] = data[i][(int) x[2]];
 					sdata[i][sdata[i].length - 1] = data[i][8];
 				}
 				
@@ -63,7 +65,7 @@ public class MastersThesisExperiment {
 						bestRprop = rprop;
 					}
 					
-					System.out.print(success ? "x" : ".");
+					System.out.print(success ? "*" : ".");
 				}
 				
 				System.out.println();
