@@ -55,7 +55,7 @@ public class MastersThesisExperiment {
 				
 				for (int i = 0; i < MAX_TRIAL; i++) {
 					RpropNeuralNetwork rprop = new RpropNeuralNetwork(sdata[0].length - 1, HIDDEN_NEURON, 1);
-					boolean success = rprop.train(sdata, TARGET_MSE, MAX_EPOCH);
+					boolean complete = rprop.train(sdata, TARGET_MSE, MAX_EPOCH);
 					
 					if (bestRprop == null) {
 						bestRprop = rprop;
@@ -65,7 +65,7 @@ public class MastersThesisExperiment {
 						bestRprop = rprop;
 					}
 					
-					System.out.print(success ? "*" : ".");
+					System.out.print(complete ? "x" : ".");
 				}
 				
 				System.out.println();
