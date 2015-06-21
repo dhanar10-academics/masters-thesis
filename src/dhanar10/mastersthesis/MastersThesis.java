@@ -17,7 +17,7 @@ public class MastersThesis {
 
 	public void run() {
 		IOptimizationProblem problem = new IOptimizationProblem() {
-			private static final int MAX_TRIAL = 10;
+			private static final int MAX_TRIAL = 5;
 			private static final int HIDDEN_NEURON = 5;
 			private static final double TARGET_MSE = 0.0001;
 			private static final int MAX_EPOCH = 10000;
@@ -82,7 +82,7 @@ public class MastersThesis {
 		};
 		
 		ArtificialBeeColony abc = new ArtificialBeeColony(5);
-		abc.optimize(problem, 10);
+		abc.optimize(problem, 50);
 		
 		System.out.println();
 		
