@@ -1,17 +1,17 @@
-package dhanar10.mastersthesisexperiment;
+package dhanar10.mastersthesis;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.util.ArrayList;
 
-import dhanar10.mastersthesisexperiment.algorithm.artificialbeecolony.ArtificialBeeColony;
-import dhanar10.mastersthesisexperiment.algorithm.artificialbeecolony.IOptimizationProblem;
-import dhanar10.mastersthesisexperiment.algorithm.rpropneuralnetwork.RpropNeuralNetwork;
+import dhanar10.mastersthesis.algorithm.artificialbeecolony.ArtificialBeeColony;
+import dhanar10.mastersthesis.algorithm.artificialbeecolony.IOptimizationProblem;
+import dhanar10.mastersthesis.algorithm.rpropneuralnetwork.RpropNeuralNetwork;
 
-public class MastersThesisExperiment {
+public class MastersThesis {
 
 	public static void main(String[] args) {
-		 MastersThesisExperiment mte = new MastersThesisExperiment();
+		 MastersThesis mte = new MastersThesis();
 		 mte.run();
 	}
 

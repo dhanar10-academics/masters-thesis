@@ -1,4 +1,4 @@
-package dhanar10.mastersthesisexperiment.algorithm.artificialbeecolony;
+package dhanar10.mastersthesis.algorithm.artificialbeecolony;
 
 public interface IOptimizationProblem {
 	public int length();
