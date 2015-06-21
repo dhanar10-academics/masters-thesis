@@ -27,12 +27,15 @@ public class MastersThesisExperiment {
 			public int length() {
 				return 3;
 			}
+			
 			public double[] upperBound() {
 				return new double[] { 7, 7, 7 };
 			}
+			
 			public double[] lowerBound() {
 				return new double[] { 1, 1, 1 };
 			}
+			
 			public double getFitness(double x[]) {
 				double sdata[][] = new double[data.length][this.length() + 1];
 				
@@ -72,6 +75,7 @@ public class MastersThesisExperiment {
 				
 				return 1 / bestRprop.getMse();
 			}
+			
 			public double getOutput(double x[]) {
 				return 0;
 			}
