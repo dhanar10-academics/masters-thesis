@@ -40,9 +40,9 @@ public class MastersThesis {
 				double sdata[][] = new double[data.length][this.length() + 1];
 				
 				for (int i = 0; i < x.length; i++) {
-					for (int j = 0; j < x.length; j++) {
-						if (i != j && ((int) x[i]) == ((int) x[j])) {
-							return 0;
+					for (int j = i + 1; j < x.length; j++) {
+						if (((int) x[i]) == ((int) x[j])) {
+							return Double.MIN_VALUE;
 						}
 					}
 				}
