@@ -18,7 +18,7 @@ public class MastersThesis {
 	public void run() {
 		IOptimizationProblem problem = new IOptimizationProblem() {
 			private static final int MAX_TRIAL = 5;
-			private static final int HIDDEN_NEURON = 5;
+			private static final int HIDDEN_NEURON = 7;
 			private static final double TARGET_MSE = 0.0001;
 			private static final int MAX_EPOCH = 10000;
 			
@@ -40,8 +40,8 @@ public class MastersThesis {
 				double sdata[][] = new double[data.length][this.length() + 1];
 				
 				for (int i = 0; i < x.length; i++) {
-					for (int j = i + 1; j < x.length; j++) {
-						if (((int) x[i]) == ((int) x[j])) {
+					for (int j = 0; j < x.length; j++) {
+						if (i != j && ((int) x[i]) == ((int) x[j])) {
 							return 0;
 						}
 					}
@@ -82,7 +82,7 @@ public class MastersThesis {
 		};
 		
 		ArtificialBeeColony abc = new ArtificialBeeColony(5);
-		abc.optimize(problem, 50);
+		abc.optimize(problem, 20);
 		
 		System.out.println();
 		
