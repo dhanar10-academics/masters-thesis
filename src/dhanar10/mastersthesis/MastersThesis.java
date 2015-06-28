@@ -12,13 +12,12 @@ public class MastersThesis {
 
 	public static void main(String[] args) {
 		 MastersThesis mte = new MastersThesis();
-		 mte.run();
+		 mte.run02();
 	}
 
-	public void run() {
+	public void run01() {
 		IOptimizationProblem problem = new IOptimizationProblem() {
-			private static final int MAX_TRIAL = 1;
-			private static final int HIDDEN_NEURON = 7;
+			private static final int HIDDEN_NEURON = 15;
 			private static final double TARGET_MSE = 0.0001;
 			private static final int MAX_EPOCH = 10000;
 			
@@ -54,26 +53,22 @@ public class MastersThesis {
 					sdata[i][sdata[i].length - 1] = data[i][8];
 				}
 				
-				RpropNeuralNetwork bestRprop = null;
+				double smse = 0;
 				
-				for (int i = 0; i < MAX_TRIAL; i++) {
+				for (int i = 0; i < 30; i++) {
 					RpropNeuralNetwork rprop = new RpropNeuralNetwork(sdata[0].length - 1, HIDDEN_NEURON, 1);
 					boolean complete = rprop.train(sdata, TARGET_MSE, MAX_EPOCH);
 					
-					if (bestRprop == null) {
-						bestRprop = rprop;
-					}
-					
-					if (rprop.getMse() < bestRprop.getMse()) {
-						bestRprop = rprop;
-					}
+					smse += rprop.getMse();
 					
 					System.out.print(complete ? "x" : ".");
 				}
 				
+				smse /= 30;
+				
 				System.out.println();
 				
-				return 1 / bestRprop.getMse();
+				return 1 / smse;
 			}
 			
 			public double getOutput(double x[]) {
@@ -89,6 +84,49 @@ public class MastersThesis {
 		for (int i = 0; i < abc.getBestSolution().length; i++) {
 			System.out.println("x[" + i + "]\t= " + (int) abc.getBestSolution()[i]);
 		}
+	}
+	
+	public void run02() {
+		double data[][] = normalize(load("data.csv", 1));
+		
+		double sdata[][] = new double[data.length][8];
+		
+		for (int i = 0; i < data.length; i++) {
+			sdata[i][0] = data[i][1];
+			sdata[i][1] = data[i][2];
+			sdata[i][2] = data[i][3];
+			sdata[i][3] = data[i][4];
+			sdata[i][4] = data[i][5];
+			sdata[i][5] = data[i][6];
+			sdata[i][6] = data[i][7];
+			sdata[i][7] = data[i][8];
+		}
+		
+//		double sdata[][] = new double[data.length][4];
+//		
+//		for (int i = 0; i < data.length; i++) {
+//			sdata[i][0] = data[i][1];
+//			sdata[i][1] = data[i][3];
+//			sdata[i][2] = data[i][4];
+//			sdata[i][3] = data[i][8];
+//		}
+		
+		double smse = 0;
+		
+		for (int i = 0; i < 30; i++) {
+			RpropNeuralNetwork rprop = new RpropNeuralNetwork(sdata[0].length - 1, 2, 1);
+			boolean complete = rprop.train(sdata, 0.0001, 10000);
+			
+			smse += rprop.getMse();
+			
+			System.out.println(complete ? "x" : "." + "\t" + rprop.getMse());
+		}
+		
+		smse /= 30;
+		
+		System.out.println();
+		
+		System.out.println(smse);
 	}
 	
 	private double[][] load(String file, int skip) {
