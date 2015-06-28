@@ -6,21 +6,18 @@ import java.util.ArrayList;
 
 import dhanar10.mastersthesis.algorithm.artificialbeecolony.ArtificialBeeColony;
 import dhanar10.mastersthesis.algorithm.artificialbeecolony.IOptimizationProblem;
-import dhanar10.mastersthesis.algorithm.rpropneuralnetwork.RpropNeuralNetwork;
+import dhanar10.mastersthesis.algorithm.irpropplusneuralnetwork.IRpropPlusNeuralNetwork;
 
 public class MastersThesis {
 
 	public static void main(String[] args) {
 		 MastersThesis mte = new MastersThesis();
-		 mte.run02();
+		 mte.run01();
+		 //mte.run02();
 	}
 
 	public void run01() {
 		IOptimizationProblem problem = new IOptimizationProblem() {
-			private static final int HIDDEN_NEURON = 15;
-			private static final double TARGET_MSE = 0.0001;
-			private static final int MAX_EPOCH = 10000;
-			
 			private double data[][] = normalize(load("data.csv", 1));
 			
 			public int length() {
@@ -56,12 +53,17 @@ public class MastersThesis {
 				double smse = 0;
 				
 				for (int i = 0; i < 30; i++) {
-					RpropNeuralNetwork rprop = new RpropNeuralNetwork(sdata[0].length - 1, HIDDEN_NEURON, 1);
-					boolean complete = rprop.train(sdata, TARGET_MSE, MAX_EPOCH);
+					IRpropPlusNeuralNetwork irpropplus = new IRpropPlusNeuralNetwork(sdata[0].length - 1, 5, 1);
+					irpropplus.setTargetMse(0.0005);
+					irpropplus.setMaxEpoch(500);
 					
-					smse += rprop.getMse();
+					while (irpropplus.canTrain()) {
+						irpropplus.train(sdata);
+					}
 					
-					System.out.print(complete ? "x" : ".");
+					smse += irpropplus.getMse();
+					
+					System.out.print(irpropplus.getMse() < irpropplus.getTargetMse() ? "x" : ".");
 				}
 				
 				smse /= 30;
@@ -114,12 +116,17 @@ public class MastersThesis {
 		double smse = 0;
 		
 		for (int i = 0; i < 30; i++) {
-			RpropNeuralNetwork rprop = new RpropNeuralNetwork(sdata[0].length - 1, 2, 1);
-			boolean complete = rprop.train(sdata, 0.0001, 10000);
+			IRpropPlusNeuralNetwork irpropplus = new IRpropPlusNeuralNetwork(sdata[0].length - 1, 5, 1);
+			irpropplus.setTargetMse(0.0005);
+			irpropplus.setMaxEpoch(500);
 			
-			smse += rprop.getMse();
+			while (irpropplus.canTrain()) {
+				irpropplus.train(sdata);
+			}
 			
-			System.out.println(complete ? "x" : "." + "\t" + rprop.getMse());
+			smse += irpropplus.getMse();
+			
+			System.out.println(irpropplus.getMse() < irpropplus.getTargetMse() ? "x" : "." + "\t" + irpropplus.getMse());
 		}
 		
 		smse /= 30;

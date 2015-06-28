@@ -26,6 +26,7 @@ public class ArtificialBeeColony {
 		}
 		
 		for (int mcn = 1; mcn <= maximumCycleNumber; mcn++) {
+			// employed
 			
 			for (int m = 0; m < x.length; m++) {
 				double v[] = new double[problem.length()];
@@ -106,6 +107,8 @@ public class ArtificialBeeColony {
 					for (int i = 0; i < x[0].length; i++) {
 						x[m][i] = problem.lowerBound()[i] + Math.random() * (problem.upperBound()[i] - problem.lowerBound()[i]);
 					}
+					
+					xfit[m] = problem.getFitness(x[m]);
 				}
 			}
 			
