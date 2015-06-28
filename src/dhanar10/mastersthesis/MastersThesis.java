@@ -55,7 +55,7 @@ public class MastersThesis {
 				for (int i = 0; i < 30; i++) {
 					IRpropPlusNeuralNetwork irpropplus = new IRpropPlusNeuralNetwork(sdata[0].length - 1, 5, 1);
 					irpropplus.setTargetMse(0.0005);
-					irpropplus.setMaxEpoch(500);
+					irpropplus.setMaxEpoch(1000);
 					
 					while (irpropplus.canTrain()) {
 						irpropplus.train(sdata);
@@ -118,7 +118,7 @@ public class MastersThesis {
 		for (int i = 0; i < 30; i++) {
 			IRpropPlusNeuralNetwork irpropplus = new IRpropPlusNeuralNetwork(sdata[0].length - 1, 5, 1);
 			irpropplus.setTargetMse(0.0005);
-			irpropplus.setMaxEpoch(500);
+			irpropplus.setMaxEpoch(1000);
 			
 			while (irpropplus.canTrain()) {
 				irpropplus.train(sdata);
