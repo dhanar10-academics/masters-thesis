@@ -135,9 +135,9 @@ public class MastersThesis {
 				double smse = 0;
 				
 				for (int i = 0; i < 30; i++) {
-					IRpropPlusNeuralNetwork irpropplus = new IRpropPlusNeuralNetwork(sdata[0].length - 1, 5, 1);
+					IRpropPlusNeuralNetwork irpropplus = new IRpropPlusNeuralNetwork(sdata[0].length - 1, 3, 1);
 					irpropplus.setTargetMse(0.0005);
-					irpropplus.setMaxEpoch(5000);
+					irpropplus.setMaxEpoch(2000);
 					
 					while (irpropplus.canTrain()) {
 						irpropplus.train(sdata);
@@ -160,8 +160,8 @@ public class MastersThesis {
 			}
 		};
 		
-		ArtificialBeeColony abc = new ArtificialBeeColony(3);
-		abc.optimize(problem, 30);
+		ArtificialBeeColony abc = new ArtificialBeeColony(5);
+		abc.optimize(problem, 50);
 		
 		System.out.println();
 		
