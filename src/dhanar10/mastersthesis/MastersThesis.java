@@ -12,42 +12,45 @@ public class MastersThesis {
 
 	public static void main(String[] args) {
 		 MastersThesis mt = new MastersThesis();
-		 //mt.run01();
-		 mt.run02();
-		 //mt.run03();
+		 mt.run01();
 	}
-
+	
 	public void run01() {
 		IOptimizationProblem problem = new IOptimizationProblem() {
 			private double data[][] = normalize(load("data.csv", 1));
 			
 			public int length() {
-				return 3;
+				return 1;
 			}
 			
 			public double[] upperBound() {
-				return new double[] { 7, 7, 7 };
+				return new double[] { 64 };
 			}
 			
 			public double[] lowerBound() {
-				return new double[] { 1, 1, 1 };
+				return new double[] { 1 };
 			}
 			
 			public double getFitness(double x[]) {
-				double sdata[][] = new double[data.length][this.length() + 1];
+				int f = 0;
 				
-				for (int i = 0; i < x.length; i++) {
-					for (int j = i + 1; j < x.length; j++) {
-						if (((int) x[i]) == ((int) x[j])) {
-							return Double.MIN_VALUE;
-						}
+				for (int i = 1; i <= 64; i*=2) {
+					if ((((int) x[0]) & i) == i) {
+						f++;
 					}
 				}
 				
+				double sdata[][] = new double[data.length][f + 1];
+				
 				for (int i = 0; i < data.length; i++) {
-					sdata[i][0] = data[i][(int) x[0]];
-					sdata[i][1] = data[i][(int) x[1]];
-					sdata[i][2] = data[i][(int) x[2]];
+					int k = 0;
+					
+					for (int j = 1; j <= 64; j*=2) {
+						if ((((int) x[0]) & j) == j) {
+							sdata[i][k++] = data[i][((int) (Math.log(j) / Math.log(2))) + 1];
+						}
+					}
+					
 					sdata[i][sdata[i].length - 1] = data[i][8];
 				}
 				
@@ -71,88 +74,7 @@ public class MastersThesis {
 				
 				System.out.println();
 				
-				return 1 / smse;
-			}
-			
-			public double getOutput(double x[]) {
-				return 0;
-			}
-		};
-		
-		ArtificialBeeColony abc = new ArtificialBeeColony(5);
-		abc.optimize(problem, 30);
-		
-		System.out.println();
-		
-		for (int i = 0; i < abc.getBestSolution().length; i++) {
-			System.out.println("x[" + i + "]\t= " + (int) abc.getBestSolution()[i]);
-		}
-	}
-	
-	public void run02() {
-		IOptimizationProblem problem = new IOptimizationProblem() {
-			private double data[][] = normalize(load("data.csv", 1));
-			
-			public int length() {
-				return 7;
-			}
-			
-			public double[] upperBound() {
-				return new double[] { 1, 1, 1, 1, 1, 1, 1 };
-			}
-			
-			public double[] lowerBound() {
-				return new double[] { 0, 0, 0, 0, 0, 0, 0 };
-			}
-			
-			public double getFitness(double x[]) {
-				int f = 0;
-				
-				for (int i = 0; i < x.length; i++) {
-					if (x[i] >= 0.5) {
-						f++;
-					}
-				}
-				
-				if (f == 0) {
-					return Double.MIN_VALUE;
-				}
-				
-				double sdata[][] = new double[data.length][f + 1];
-				
-				for (int i = 0; i < data.length; i++) {
-					int k = 0;
-					
-					for (int j = 0; j < x.length; j++) {
-						if (x[j] >= 0.5) {
-							sdata[i][k++] = data[i][j + 1];
-						}
-					}
-					
-					sdata[i][sdata[i].length - 1] = data[i][8];
-				}
-				
-				double smse = 0;
-				
-				for (int i = 0; i < 30; i++) {
-					IRpropPlusNeuralNetwork irpropplus = new IRpropPlusNeuralNetwork(sdata[0].length - 1, 3, 1);
-					irpropplus.setTargetMse(0.0005);
-					irpropplus.setMaxEpoch(2000);
-					
-					while (irpropplus.canTrain()) {
-						irpropplus.train(sdata);
-					}
-					
-					smse += irpropplus.getMse();
-					
-					System.out.print(irpropplus.getMse() < irpropplus.getTargetMse() ? "x" : ".");
-				}
-				
-				smse /= 30;
-				
-				System.out.println();
-				
-				return (1 / smse) - (f * 100);
+				return (1 / smse) + ((7 - f) * 50);
 			}
 			
 			public double getOutput(double x[]) {
@@ -166,56 +88,8 @@ public class MastersThesis {
 		System.out.println();
 		
 		for (int i = 0; i < abc.getBestSolution().length; i++) {
-			System.out.println("x[" + i + "]\t= " + (abc.getBestSolution()[i] >= 0.5 ? 1 : 0));
+			System.out.println("x[" + i + "]\t= " + abc.getBestSolution()[i]);
 		}
-	}
-	
-	public void run03() {
-		double data[][] = normalize(load("data.csv", 1));
-		
-//		double sdata[][] = new double[data.length][8];
-//		
-//		for (int i = 0; i < data.length; i++) {
-//			sdata[i][0] = data[i][1];
-//			sdata[i][1] = data[i][2];
-//			sdata[i][2] = data[i][3];
-//			sdata[i][3] = data[i][4];
-//			sdata[i][4] = data[i][5];
-//			sdata[i][5] = data[i][6];
-//			sdata[i][6] = data[i][7];
-//			sdata[i][7] = data[i][8];
-//		}
-		
-		double sdata[][] = new double[data.length][4];
-		
-		for (int i = 0; i < data.length; i++) {
-			sdata[i][0] = data[i][1];
-			sdata[i][1] = data[i][3];
-			sdata[i][2] = data[i][4];
-			sdata[i][3] = data[i][8];
-		}
-		
-		double smse = 0;
-		
-		for (int i = 0; i < 30; i++) {
-			IRpropPlusNeuralNetwork irpropplus = new IRpropPlusNeuralNetwork(sdata[0].length - 1, 5, 1);
-			irpropplus.setTargetMse(0.0005);
-			irpropplus.setMaxEpoch(1000);
-			
-			while (irpropplus.canTrain()) {
-				irpropplus.train(sdata);
-			}
-			
-			smse += irpropplus.getMse();
-			
-			System.out.println((irpropplus.getMse() < irpropplus.getTargetMse() ? "x" : ".") + "\t" + irpropplus.getMse());
-		}
-		
-		smse /= 30;
-		
-		System.out.println();
-		
-		System.out.println(1 / smse);
 	}
 	
 	private double[][] load(String file, int skip) {

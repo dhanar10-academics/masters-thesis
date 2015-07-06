@@ -125,7 +125,8 @@ public class ArtificialBeeColony {
 			
 			for (int i = 0; i < xbest.length; i++) {
 				//System.out.print((int) xbest[i] + "\t");
-				System.out.print((xbest[i] >= 0.5 ? 1 : 0) + "\t");
+				StringBuffer sb = new StringBuffer(String.format("%7s", Integer.toBinaryString((int) xbest[i])).replace(' ', '0'));
+				System.out.print(sb.reverse() + "\t");
 			}
 			
 			System.out.println(xbestfit);
