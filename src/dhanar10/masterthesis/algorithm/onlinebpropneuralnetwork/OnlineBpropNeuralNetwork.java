@@ -17,12 +17,6 @@ public class OnlineBpropNeuralNetwork {
 		
 		wInputHidden = new double[yInput.length][yHidden.length];
 		wHiddenOutput = new double[yHidden.length][yOutput.length];
-	}
-	
-	public boolean train(double data[][], double learningRate, double targetMse, double maxEpoch) {
-		boolean success = true;
-		
-		int epoch = 0;
 		
 		for (int i = 0; i < wInputHidden.length; i++) {
 			for (int j = 0; j < wInputHidden[0].length; j++) {
@@ -35,6 +29,12 @@ public class OnlineBpropNeuralNetwork {
 				wHiddenOutput[i][j] = Math.random() * 2 - 1;
 			}
 		}
+	}
+	
+	public boolean train(double data[][], double learningRate, double targetMse, double maxEpoch) {
+		boolean success = true;
+		
+		int epoch = 0;
 
 		while (true) {
 			epoch++;
@@ -160,6 +160,22 @@ public class OnlineBpropNeuralNetwork {
 	
 	public double getMse() {
 		return mse;
+	}
+	
+	public double[][] getWeightInputHidden() {
+		return this.wInputHidden.clone();
+	}
+	
+	public double[][] getWeightHiddenOutput() {
+		return this.wHiddenOutput.clone();
+	}
+	
+	public void setWeightInputHidden(double[][] wInputHidden) {
+		this.wInputHidden = wInputHidden;
+	}
+	
+	public void setWeightHiddenOutput(double[][] wHiddenOutput) {
+		this.wHiddenOutput = wHiddenOutput;
 	}
 	
 	private double sigmoid(double x) {

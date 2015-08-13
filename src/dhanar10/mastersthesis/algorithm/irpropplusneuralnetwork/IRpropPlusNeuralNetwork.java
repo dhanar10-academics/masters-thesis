@@ -270,6 +270,22 @@ public class IRpropPlusNeuralNetwork {
 		return epoch;
 	}
 	
+	public double[][] getWeightInputHidden() {
+		return this.wInputHidden.clone();
+	}
+	
+	public double[][] getWeightHiddenOutput() {
+		return this.wHiddenOutput.clone();
+	}
+	
+	public void setWeightInputHidden(double[][] wInputHidden) {
+		this.wInputHidden = wInputHidden;
+	}
+	
+	public void setWeightHiddenOutput(double[][] wHiddenOutput) {
+		this.wHiddenOutput = wHiddenOutput;
+	}
+	
 	private double sigmoid(double x) {
 		return 1 / (1 + Math.pow(Math.E, -x));
 	}
