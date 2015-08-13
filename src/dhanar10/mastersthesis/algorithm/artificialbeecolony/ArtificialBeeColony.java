@@ -4,6 +4,37 @@ public class ArtificialBeeColony {
 	private int foodSource;
 	private double[] bestSolution;
 	
+	public static void main(String[] args) {
+		IOptimizationProblem problem = new IOptimizationProblem() {
+			public int length() {
+				return 2;
+			}
+			public double[] upperBound() {
+				return new double[] {4, 7};
+			}
+			public double[] lowerBound() {
+				return new double[] {0, 0};
+			}
+			public double getOutput(double x[]) {
+				return x[0] + x[1];
+			}
+			public double getFitness(double x[]) {
+				return 1 / (10 - this.getOutput(x)); // x[0] + x[1] = 10
+			}
+		};
+		
+		ArtificialBeeColony abc = new ArtificialBeeColony(10);
+		abc.optimize(problem, 10);
+		
+		System.out.println();
+		
+		for (int i = 0; i < abc.getBestSolution().length; i++) {
+			System.out.println("x[" + i + "]\t= " + abc.getBestSolution()[i]);
+		}
+		
+		System.out.println("y\t= " + problem.getOutput(abc.getBestSolution()));
+	}
+	
 	public ArtificialBeeColony(int foodSource) {
 		this.foodSource = foodSource;
 	}
@@ -15,7 +46,7 @@ public class ArtificialBeeColony {
 		double xbest[] = new double[problem.length()];
 		double xbestfit = 0;
 		
-		// initialization
+		// Initialization
 		
 		for (int m = 0; m < x.length; m++) {
 			for (int i = 0; i < x[0].length; i++) {
@@ -26,7 +57,7 @@ public class ArtificialBeeColony {
 		}
 		
 		for (int mcn = 1; mcn <= maximumCycleNumber; mcn++) {
-			// employed
+			// Employed Bee
 			
 			for (int m = 0; m < x.length; m++) {
 				double v[] = new double[problem.length()];
@@ -57,7 +88,7 @@ public class ArtificialBeeColony {
 				}
 			}
 			
-			// onlooker
+			// Onlooker Bee
 			
 			for (int t = 0; t < x.length; t++) {
 				double xfitmax = 0;
@@ -65,6 +96,8 @@ public class ArtificialBeeColony {
 				double vfit = 0;
 				int m = 0;
 				int k = 0;
+				
+				// BEGIN Stochastic Roulette Wheel
 				
 				for (int i = 0; i < x.length; i++) {
 					if (xfit[i] > xfitmax) {
@@ -78,6 +111,8 @@ public class ArtificialBeeColony {
 					if (Math.random() < xfit[m] / xfitmax)
 						break;
 				}
+				
+				// END Stochastic Roulette Wheel
 				
 				do {
 					k = (int) Math.round(Math.random() * (x.length - 1));
@@ -100,7 +135,7 @@ public class ArtificialBeeColony {
 				}
 			}
 			
-			// scout
+			// Scout Bee
 			
 			for (int m = 0; m < x.length; m++) {
 				if (xlimit[m] > foodSource * 2) {
@@ -112,7 +147,7 @@ public class ArtificialBeeColony {
 				}
 			}
 			
-			// remember the best solution so far
+			// Remember the best solution so far
 			
 			for (int m = 0; m < x.length; m++) {
 				if (xfit[m] > xbestfit) {
@@ -121,15 +156,7 @@ public class ArtificialBeeColony {
 				}
 			}
 			
-			System.out.print(mcn + "\t");
-			
-			for (int i = 0; i < xbest.length; i++) {
-				//System.out.print((int) xbest[i] + "\t");
-				StringBuffer sb = new StringBuffer(String.format("%7s", Integer.toBinaryString((int) xbest[i])).replace(' ', '0'));
-				System.out.print(sb.reverse() + "\t");
-			}
-			
-			System.out.println(xbestfit);
+			System.out.println(mcn + "\t" + xbestfit);
 		}
 		
 		bestSolution = xbest;
