@@ -10,7 +10,18 @@ public class MastersThesis {
 
 	public static void main(String[] args) {
 		MastersThesis mt = new MastersThesis();
-		mt.experiment07();
+		
+		double[] result = new double[30];
+		
+		for (int i = 0; i < result.length; i++)
+		{
+			result[i] = mt.experiment06();
+		}
+		
+		for (int i = 0; i < result.length; i++)
+		{
+			System.out.println(result[i]);
+		}
 	}
 	
 	public MastersThesis() {
@@ -30,8 +41,8 @@ public class MastersThesis {
 	}
 	
 	public void experiment01() {
-		OnlineBpropNeuralNetwork bprop = new OnlineBpropNeuralNetwork(2, 4, 1);
-		bprop.train(data, 0.7, 0.0001, 5000);
+		OnlineBpropNeuralNetwork bprop = new OnlineBpropNeuralNetwork(2, 5, 1);
+		bprop.train(data, 0.7, 0.0001, 100000);
 		
 //		System.out.println();
 //		
@@ -50,10 +61,10 @@ public class MastersThesis {
 //		}
 	}
 	
-	public void experiment02() {
-		IRpropPlusNeuralNetwork rprop = new IRpropPlusNeuralNetwork(2, 4, 1);
+	public double experiment02() {
+		IRpropPlusNeuralNetwork rprop = new IRpropPlusNeuralNetwork(2, 5, 1);
 		rprop.setTargetMse(0.0001);
-		rprop.setMaxEpoch(100000);
+		rprop.setMaxEpoch(25000);
 		
 		while (rprop.canTrain()) {
 			rprop.train(data);
@@ -76,12 +87,14 @@ public class MastersThesis {
 //			
 //			System.out.println();
 //		}
+		
+		return rprop.getMse();
 	}
 	
 	public void experiment03() {
-		IRpropPlusNeuralNetwork rprop = new IRpropPlusNeuralNetwork(2, 4, 1);
+		IRpropPlusNeuralNetwork rprop = new IRpropPlusNeuralNetwork(2, 5, 1);
 		rprop.setTargetMse(0.0001);
-		rprop.setMaxEpoch(100000);
+		rprop.setMaxEpoch(50000);
 		
 		while (rprop.canTrain()) {
 			rprop.train(data);
@@ -89,18 +102,18 @@ public class MastersThesis {
 			System.out.println(rprop.getEpoch() + "\t" + rprop.getMse());
 		}
 		
-		OnlineBpropNeuralNetwork bprop = new OnlineBpropNeuralNetwork(2, 4, 1);
+		OnlineBpropNeuralNetwork bprop = new OnlineBpropNeuralNetwork(2, 5, 1);
 		bprop.setWeightInputHidden(rprop.getWeightInputHidden());
 		bprop.setWeightHiddenOutput(rprop.getWeightHiddenOutput());
-		bprop.train(data, 0.7, 0.0001, 100000);
+		bprop.train(data, 0.7, 0.0001, 50000);
 	}
 	
 	public void experiment04() {
-		OnlineBpropNeuralNetwork bprop = new OnlineBpropNeuralNetwork(2, 4, 1);
+		OnlineBpropNeuralNetwork bprop = new OnlineBpropNeuralNetwork(2, 5, 1);
 		
 		bprop.train(data, 0.7, 0.0001, 100000);
 		
-		IRpropPlusNeuralNetwork rprop = new IRpropPlusNeuralNetwork(2, 4, 1);
+		IRpropPlusNeuralNetwork rprop = new IRpropPlusNeuralNetwork(2, 5, 1);
 		rprop.setWeightInputHidden(bprop.getWeightInputHidden());
 		rprop.setWeightHiddenOutput(bprop.getWeightHiddenOutput());
 		rprop.setTargetMse(0.0001);
@@ -116,13 +129,13 @@ public class MastersThesis {
 	public void experiment05() {
 		IOptimizationProblem problem = new IOptimizationProblem() {
 			public int length() {
-				return 20;
+				return 24;
 			}
 			public double[] upperBound() {
 				double[] b = new double[this.length()];
 				
 				for (int i = 0; i < b.length; i++) {
-					b[i] = 10;
+					b[i] = 1;
 				}
 				
 				return b;
@@ -131,13 +144,13 @@ public class MastersThesis {
 				double[] b = new double[this.length()];
 				
 				for (int i = 0; i < b.length; i++) {
-					b[i] = -10;
+					b[i] = -1;
 				}
 				
 				return b;
 			}
 			public double getFitness(double x[]) {
-				OnlineBpropNeuralNetwork bprop = new OnlineBpropNeuralNetwork(2, 4, 1);
+				OnlineBpropNeuralNetwork bprop = new OnlineBpropNeuralNetwork(2, 5, 1);
 				
 				double[][] wInputHidden = bprop.getWeightInputHidden();
 				double[][] wHiddenOutput = bprop.getWeightHiddenOutput();
@@ -176,10 +189,10 @@ public class MastersThesis {
 			}
 		};
 		
-		ArtificialBeeColony abc = new ArtificialBeeColony(100);
-		abc.optimize(problem, 500);
+		ArtificialBeeColony abc = new ArtificialBeeColony(10);
+		abc.optimize(problem, 1000);
 		
-		OnlineBpropNeuralNetwork bprop = new OnlineBpropNeuralNetwork(2, 4, 1);
+		OnlineBpropNeuralNetwork bprop = new OnlineBpropNeuralNetwork(2, 5, 1);
 		
 		double[][] wInputHidden = bprop.getWeightInputHidden();
 		double[][] wHiddenOutput = bprop.getWeightHiddenOutput();
@@ -203,16 +216,16 @@ public class MastersThesis {
 		bprop.train(data, 0.7, 0.0001, 100000);
 	}
 	
-	public void experiment06() {
+	public double experiment06() {
 		IOptimizationProblem problem = new IOptimizationProblem() {
 			public int length() {
-				return 20;
+				return 24;
 			}
 			public double[] upperBound() {
 				double[] b = new double[this.length()];
 				
 				for (int i = 0; i < b.length; i++) {
-					b[i] = 7;
+					b[i] = 1;
 				}
 				
 				return b;
@@ -221,13 +234,13 @@ public class MastersThesis {
 				double[] b = new double[this.length()];
 				
 				for (int i = 0; i < b.length; i++) {
-					b[i] = -7;
+					b[i] = 0;
 				}
 				
 				return b;
 			}
 			public double getFitness(double x[]) {
-				IRpropPlusNeuralNetwork rprop = new IRpropPlusNeuralNetwork(2, 4, 1);
+				IRpropPlusNeuralNetwork rprop = new IRpropPlusNeuralNetwork(2, 5, 1);
 				
 				double[][] wInputHidden = rprop.getWeightInputHidden();
 				double[][] wHiddenOutput = rprop.getWeightHiddenOutput();
@@ -266,10 +279,10 @@ public class MastersThesis {
 			}
 		};
 		
-		ArtificialBeeColony abc = new ArtificialBeeColony(100);
-		abc.optimize(problem, 500);
+		ArtificialBeeColony abc = new ArtificialBeeColony(50);
+		abc.optimize(problem, 100);
 		
-		IRpropPlusNeuralNetwork rprop = new IRpropPlusNeuralNetwork(2, 4, 1);
+		IRpropPlusNeuralNetwork rprop = new IRpropPlusNeuralNetwork(2, 5, 1);
 		
 		double[][] wInputHidden = rprop.getWeightInputHidden();
 		double[][] wHiddenOutput = rprop.getWeightHiddenOutput();
@@ -291,19 +304,21 @@ public class MastersThesis {
 		rprop.setWeightInputHidden(wInputHidden);
 		rprop.setWeightHiddenOutput(wHiddenOutput);
 		rprop.setTargetMse(0.0001);
-		rprop.setMaxEpoch(100000);
+		rprop.setMaxEpoch(25000);
 		
 		while (rprop.canTrain()) {
 			rprop.train(data);
 			
 			System.out.println(rprop.getEpoch() + "\t" + rprop.getMse());
 		}		
+		
+		return rprop.getMse();
 	}
 
 	public void experiment07() {
 		IOptimizationProblem problem = new IOptimizationProblem() {
 			public int length() {
-				return 20;
+				return 24;
 			}
 			public double[] upperBound() {
 				double[] b = new double[this.length()];
@@ -324,7 +339,7 @@ public class MastersThesis {
 				return b;
 			}
 			public double getFitness(double x[]) {
-				IRpropPlusNeuralNetwork rprop = new IRpropPlusNeuralNetwork(2, 4, 1);
+				IRpropPlusNeuralNetwork rprop = new IRpropPlusNeuralNetwork(2, 5, 1);
 				
 				double[][] wInputHidden = rprop.getWeightInputHidden();
 				double[][] wHiddenOutput = rprop.getWeightHiddenOutput();
@@ -362,34 +377,34 @@ public class MastersThesis {
 		ArtificialBeeColony abc = new ArtificialBeeColony(5);
 		abc.optimize(problem, 10);
 		
-//		IRpropPlusNeuralNetwork rprop = new IRpropPlusNeuralNetwork(2, 4, 1);
-//		
-//		double[][] wInputHidden = rprop.getWeightInputHidden();
-//		double[][] wHiddenOutput = rprop.getWeightHiddenOutput();
-//		
-//		int c = 0;
-//		
-//		for (int i = 0; i < wInputHidden.length; i++) {
-//			for (int j = 0; j < wInputHidden[0].length; j++) {
-//				wInputHidden[i][j] = abc.getBestSolution()[c++];
-//			}
-//		}
-//		
-//		for (int i = 0; i < wHiddenOutput.length; i++) {
-//			for (int j = 0; j < wHiddenOutput[0].length; j++) {
-//				wHiddenOutput[i][j] = abc.getBestSolution()[c++];
-//			}
-//		}
-//		
-//		rprop.setWeightInputHidden(wInputHidden);
-//		rprop.setWeightHiddenOutput(wHiddenOutput);
-//		rprop.setTargetMse(0.0001);
-//		rprop.setMaxEpoch(100000);
-//		
-//		while (rprop.canTrain()) {
-//			rprop.train(data);
-//			
-//			System.out.println(rprop.getEpoch() + "\t" + rprop.getMse());
-//		}		
+		IRpropPlusNeuralNetwork rprop = new IRpropPlusNeuralNetwork(2, 5, 1);
+		
+		double[][] wInputHidden = rprop.getWeightInputHidden();
+		double[][] wHiddenOutput = rprop.getWeightHiddenOutput();
+		
+		int c = 0;
+		
+		for (int i = 0; i < wInputHidden.length; i++) {
+			for (int j = 0; j < wInputHidden[0].length; j++) {
+				wInputHidden[i][j] = abc.getBestSolution()[c++];
+			}
+		}
+		
+		for (int i = 0; i < wHiddenOutput.length; i++) {
+			for (int j = 0; j < wHiddenOutput[0].length; j++) {
+				wHiddenOutput[i][j] = abc.getBestSolution()[c++];
+			}
+		}
+		
+		rprop.setWeightInputHidden(wInputHidden);
+		rprop.setWeightHiddenOutput(wHiddenOutput);
+		rprop.setTargetMse(0.0001);
+		rprop.setMaxEpoch(100000);
+		
+		while (rprop.canTrain()) {
+			rprop.train(data);
+			
+			System.out.println(rprop.getEpoch() + "\t" + rprop.getMse());
+		}		
 	}
 }
