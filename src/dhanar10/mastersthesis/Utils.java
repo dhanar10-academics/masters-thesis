@@ -2,6 +2,8 @@ package dhanar10.mastersthesis;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
+//import java.math.RoundingMode;
+//import java.text.DecimalFormat;
 import java.util.ArrayList;
 
 public class Utils {
@@ -37,6 +39,9 @@ public class Utils {
 			return null;
 		}
 		
+		//DecimalFormat df = new DecimalFormat("#.#");
+		//df.setRoundingMode(RoundingMode.CEILING);
+		
 		for (int i = 0; i < buffer.size(); i++) {
 			String split[] = buffer.get(i).split(",");
 			
@@ -46,6 +51,7 @@ public class Utils {
 			
 			for (int j = 0; j < split.length; j++) {
 				data[i][j] = Double.parseDouble(split[j]);
+				//data[i][j] = Double.parseDouble(df.format(data[i][j]));
 			}
 		}
 		

@@ -49,13 +49,13 @@ public class IRpropPlusNeuralNetwork {
 		
 		for (int i = 0; i < wInputHidden.length; i++) {
 			for (int j = 0; j < wInputHidden[0].length; j++) {
-				wInputHidden[i][j] = Math.random() * 2 - 1;
+				wInputHidden[i][j] = Math.random() /** 2 - 1*/;
 			}
 		}
 		
 		for (int i = 0; i < wHiddenOutput.length; i++) {
 			for (int j = 0; j < wHiddenOutput[0].length; j++) {
-				wHiddenOutput[i][j] = Math.random() * 2 - 1;
+				wHiddenOutput[i][j] = Math.random() /** 2 - 1*/;
 			}
 		}
 		

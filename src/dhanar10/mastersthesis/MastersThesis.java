@@ -10,24 +10,27 @@ public class MastersThesis {
 	
 	private static final double TARGET_MSE = 0.0001;
 	private static final int MAX_EPOCH = 50000;
-	private static final double LEARNING_RATE = 0.7;
+	private static final double LEARNING_RATE = 0.3;
 	
-	private static final int COLONY_SIZE = 10;
-	private static final int MAXIMUM_CYCLE_NUMBER = 100;
-	private static final double UPPER_BOUND = 1.0;
-	private static final double LOWER_BOUND = 0.0;
+	private static final int COLONY_SIZE = 100;
+	private static final int MAXIMUM_CYCLE_NUMBER = 500;
+	private static final double UPPER_BOUND = 5;
+	private static final double LOWER_BOUND = -5;
 	
 	private double[][] data;
 	
 	public static void main(String[] args) {
-		MastersThesis mt = new MastersThesis();
+		MastersThesis mt = new MastersThesis(Integer.parseInt(args[0]));
 		
 		double[] result = new double[30];
 		
 		for (int i = 0; i < result.length; i++)
 		{
-			result[i] = mt.performExperiment();
+			result[i] = mt.performExperiment(args[1]);
 		}
+		
+		System.out.printf("Variable: %s\n", args[0]);
+		System.out.printf("Method: %s\n", args[1]);
 		
 		for (int i = 0; i < result.length; i++)
 		{
@@ -35,29 +38,87 @@ public class MastersThesis {
 		}
 	}
 	
-	public MastersThesis() {
+	public MastersThesis(int variable) {
 		data = Utils.load("data.csv", 1);
 		
-		// BEGIN FEATURE SELECTION
+		// BEGIN FEATURE SELECTION A
+		
+//		switch (variable) {
+//			case 1:
+//				data = Utils.cut(data, new int[] { 1, 8 });
+//				break;
+//			case 2:
+//				data = Utils.cut(data, new int[] { 1, 4, 8 });
+//				break;
+//			case 3:
+//				data = Utils.cut(data, new int[] { 1, 4, 6, 8 });
+//				break;
+//			case 4:
+//				data = Utils.cut(data, new int[] { 1, 4, 6, 5, 8 });
+//				break;
+//			case 7:
+//				data = Utils.cut(data, new int[] { 1, 2, 3, 4, 5, 6, 7, 8 }); // no feature selection
+//				break;
+//			default:
+//				System.exit(1);
+//					
+//		}
+
+		// END FEATURE SELECTION A
+		
+		// BEGIN FEATURE SELECTION B
+		
+		switch (variable) {
+			case 1:
+				data = Utils.cut(data, new int[] { 1, 8 });
+				break;
+			case 2:
+				data = Utils.cut(data, new int[] { 1, 7, 8 });
+				break;
+			case 3:
+				data = Utils.cut(data, new int[] { 1, 7, 3, 8 });
+				break;
+			case 4:
+				data = Utils.cut(data, new int[] { 1, 7, 3, 2, 8 });
+				break;
+			case 7:
+				data = Utils.cut(data, new int[] { 1, 2, 3, 4, 5, 6, 7, 8 }); // no feature selection
+				break;
+			default:
+				System.exit(1);
+					
+		}
 		
 		//data = Utils.cut(data, new int[] { 1, 8 });
 		//data = Utils.cut(data, new int[] { 1, 7, 8 });
 		//data = Utils.cut(data, new int[] { 1, 7, 3, 8 });
-		data = Utils.cut(data, new int[] { 1, 7, 3, 2, 8 });
+		//data = Utils.cut(data, new int[] { 1, 7, 3, 2, 8 });
 		//data = Utils.cut(data, new int[] { 1, 2, 3, 4, 5, 6, 7, 8 }); // no feature selection
 		
-		// END FEATURE SELECTION
+		// END FEATURE SELECTION B
 		
 		data = Utils.normalize(data);
 	}
 	
-	public double performExperiment() {
+	public double performExperiment(String method) {
 		// BEGIN METHOD
 		
-		return rprop();
-		//return abcrprop();
-		//return bprop();
-		//return abcbprop();
+		if (method.equals("bprop")) {
+			return bprop();
+		}
+		else if (method.equals("abcbprop")) {
+			return abcbprop();
+		}
+		else if (method.equals("rprop")) {
+			return rprop();
+		} 
+		else if (method.equals("abcrprop")) {
+			return abcrprop();
+		}
+		
+		System.exit(2);
+		
+		return 0;
 		
 		//END METHOD
 	}
