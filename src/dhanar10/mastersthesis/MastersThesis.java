@@ -43,32 +43,32 @@ public class MastersThesis {
 		
 		// BEGIN FEATURE SELECTION A
 		
-//		switch (variable) {
-//			case 1:
-//				data = Utils.cut(data, new int[] { 1, 8 });
-//				break;
-//			case 2:
-//				data = Utils.cut(data, new int[] { 1, 4, 8 });
-//				break;
-//			case 3:
-//				data = Utils.cut(data, new int[] { 1, 4, 6, 8 });
-//				break;
-//			case 4:
-//				data = Utils.cut(data, new int[] { 1, 4, 6, 5, 8 });
-//				break;
-//			case 7:
-//				data = Utils.cut(data, new int[] { 1, 2, 3, 4, 5, 6, 7, 8 }); // no feature selection
-//				break;
-//			default:
-//				System.exit(1);
-//					
-//		}
+		switch (variable) {
+			case 1:
+				data = Utils.cut(data, new int[] { 1, 8 });
+				break;
+			case 2:
+				data = Utils.cut(data, new int[] { 1, 4, 8 });
+				break;
+			case 3:
+				data = Utils.cut(data, new int[] { 1, 4, 6, 8 });
+				break;
+			case 4:
+				data = Utils.cut(data, new int[] { 1, 4, 6, 5, 8 });
+				break;
+			case 7:
+				data = Utils.cut(data, new int[] { 1, 2, 3, 4, 5, 6, 7, 8 }); // no feature selection
+				break;
+			default:
+				System.exit(1);
+					
+		}
 
 		// END FEATURE SELECTION A
 		
 		// BEGIN FEATURE SELECTION B
 		
-		switch (variable) {
+		/*switch (variable) {
 			case 1:
 				data = Utils.cut(data, new int[] { 1, 8 });
 				break;
@@ -87,13 +87,7 @@ public class MastersThesis {
 			default:
 				System.exit(1);
 					
-		}
-		
-		//data = Utils.cut(data, new int[] { 1, 8 });
-		//data = Utils.cut(data, new int[] { 1, 7, 8 });
-		//data = Utils.cut(data, new int[] { 1, 7, 3, 8 });
-		//data = Utils.cut(data, new int[] { 1, 7, 3, 2, 8 });
-		//data = Utils.cut(data, new int[] { 1, 2, 3, 4, 5, 6, 7, 8 }); // no feature selection
+		}*/
 		
 		// END FEATURE SELECTION B
 		
