@@ -20,17 +20,18 @@ public class MastersThesis {
 	private double[][] data;
 	
 	public static void main(String[] args) {
-		MastersThesis mt = new MastersThesis(Integer.parseInt(args[0]));
+		MastersThesis mt = new MastersThesis(Integer.parseInt(args[1]));
 		
 		double[] result = new double[30];
 		
 		for (int i = 0; i < result.length; i++)
 		{
-			result[i] = mt.performExperiment(args[1]);
+			result[i] = mt.performExperiment(args[0]);
 		}
 		
-		System.out.printf("Variable: %s\n", args[0]);
-		System.out.printf("Method: %s\n", args[1]);
+		System.out.printf("Method: %s\n", args[0]);
+		System.out.printf("Variable: %s\n", args[1]);
+		System.out.printf("MSE:\n");
 		
 		for (int i = 0; i < result.length; i++)
 		{
@@ -40,8 +41,6 @@ public class MastersThesis {
 	
 	public MastersThesis(int variable) {
 		data = Utils.load("data.csv", 1);
-		
-		// BEGIN FEATURE SELECTION A
 		
 		switch (variable) {
 			case 1:
@@ -60,43 +59,14 @@ public class MastersThesis {
 				data = Utils.cut(data, new int[] { 1, 2, 3, 4, 5, 6, 7, 8 }); // no feature selection
 				break;
 			default:
-				System.exit(1);
+				System.exit(2);
 					
 		}
-
-		// END FEATURE SELECTION A
-		
-		// BEGIN FEATURE SELECTION B
-		
-		/*switch (variable) {
-			case 1:
-				data = Utils.cut(data, new int[] { 1, 8 });
-				break;
-			case 2:
-				data = Utils.cut(data, new int[] { 1, 7, 8 });
-				break;
-			case 3:
-				data = Utils.cut(data, new int[] { 1, 7, 3, 8 });
-				break;
-			case 4:
-				data = Utils.cut(data, new int[] { 1, 7, 3, 2, 8 });
-				break;
-			case 7:
-				data = Utils.cut(data, new int[] { 1, 2, 3, 4, 5, 6, 7, 8 }); // no feature selection
-				break;
-			default:
-				System.exit(1);
-					
-		}*/
-		
-		// END FEATURE SELECTION B
 		
 		data = Utils.normalize(data);
 	}
 	
 	public double performExperiment(String method) {
-		// BEGIN METHOD
-		
 		if (method.equals("bprop")) {
 			return bprop();
 		}
@@ -110,11 +80,9 @@ public class MastersThesis {
 			return abcrprop();
 		}
 		
-		System.exit(2);
+		System.exit(1);
 		
 		return 0;
-		
-		//END METHOD
 	}
 	
 	public double rprop() {
